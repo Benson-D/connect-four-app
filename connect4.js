@@ -7,8 +7,8 @@
  * board fills (tie)
  */
 
-let WIDTH = 7;
-let HEIGHT = 6;
+const WIDTH = 7;
+const HEIGHT = 6;
 
 let currPlayer = 1; // active player: 1 or 2
 let board = []; // array of rows, each row is array of cells  (board[y][x])
@@ -18,6 +18,15 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
  */
 
 function makeBoard() {
+  for (let i = 0; i < WIDTH; i++) {
+    const row = [];
+    for (let j = 0; j < HEIGHT; j++) {
+      row.push([]);
+    }
+
+    board.push(row);
+  }
+
   // TODO: set "board" to empty HEIGHT x WIDTH matrix array
 }
 
@@ -25,8 +34,10 @@ function makeBoard() {
 
 function makeHtmlBoard() {
   // TODO: get "htmlBoard" variable from the item in HTML w/ID of "board"
+  const htmlBoard = document.getElementById("board");
 
-  // TODO: add comment for this code
+  // TODO: Creating table row for user input, equal to width of board set up attribute, plus event listener, gives functionality to column when clicked on
+
   let top = document.createElement("tr");
   top.setAttribute("id", "column-top");
   top.addEventListener("click", handleClick);
@@ -37,6 +48,7 @@ function makeHtmlBoard() {
     headCell.setAttribute("id", x);
     top.append(headCell);
   }
+
   htmlBoard.append(top);
 
   // dynamically creates the main part of html board
@@ -78,10 +90,10 @@ function endGame(msg) {
 
 function handleClick(evt) {
   // get x from ID of clicked cell
-  var x = +evt.target.id;
+  let x = +evt.target.id;
 
   // get next spot in column (if none, ignore click)
-  var y = findSpotForCol(x);
+  let y = findSpotForCol(x);
   if (y === null) {
     return;
   }
@@ -118,8 +130,8 @@ function checkForWin() {
   // using HEIGHT and WIDTH, generate "check list" of coordinates
   // for 4 cells (starting here) for each of the different
   // ways to win: horizontal, vertical, diagonalDR, diagonalDL
-  for (var y = 0; y < HEIGHT; y++) {
-    for (var x = 0; x < WIDTH; x++) {
+  for (let y = 0; y < HEIGHT; y++) {
+    for (let x = 0; x < WIDTH; x++) {
       // TODO: assign values to the below variables for each of the ways to win
       // horizontal has been assigned for you
       // each should be an array of 4 cell coordinates:
