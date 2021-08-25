@@ -64,8 +64,8 @@ function makeHtmlBoard() {
       // you'll use this later, so make sure you use y-x
       // TODO: append the table cell to the table row
       let cell = document.createElement("td");
-      cell.setAttribute("id", y - x);
-      cell.append(row);
+      cell.setAttribute("id", [y, x]);
+      row.append(cell);
     }
     // TODO: append the row to the html board
     htmlBoard.append(row);
@@ -83,6 +83,15 @@ function findSpotForCol(x) {
 
 function placeInTable(y, x) {
   // TODO: make a div and insert into correct table cell
+  const piece = document.createElement("div");
+  piece.classList.add("piece");
+
+  currPlayer === 1
+    ? piece.classList.add("player1")
+    : piece.classList.add("player2");
+
+  const selectedCell = document.getElementById([y, x]);
+  selectedCell.append(piece);
 }
 
 /** endGame: announce game end */
@@ -116,6 +125,7 @@ function handleClick(evt) {
   // TODO: check if all cells in board are filled; if so call, call endGame
 
   // switch players
+  currPlayer === 1 ? (currPlayer = 2) : (currPlayer = 1);
   // TODO: switch currPlayer 1 <-> 2
 }
 
