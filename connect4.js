@@ -17,10 +17,13 @@ let board = []; // array of rows, each row is array of cells  (board[y][x])
  *    board = array of rows, each row is array of cells  (board[y][x])
  */
 
-function makeBoard() {
+function makeBoard() { 
+  //CODEREVIEW: change i and j to 'y' and 'x' to make it easier and keep it consistent
+  //CODEREVIEW: when looping over something bigger than "just a loop", good to go beyond 'i and j'
   for (let i = 0; i < HEIGHT; i++) {
-    const rowArr = [];
+    const rowArr = []; //CODEREVIEW: change rowArr to something more clear. rowArr sounds like 'array of rows'
     for (let j = 0; j < WIDTH; j++) {
+    //CODEREVIEW: [] is a truthy thing, and here it would be better to have a falsey thing, like 0, null, undefined  
       rowArr.push([]);
     }
 
@@ -64,7 +67,10 @@ function makeHtmlBoard() {
       // you'll use this later, so make sure you use y-x
       // TODO: append the table cell to the table row
       let cell = document.createElement("td");
+      //CODEREVIEW: Make the id explicitely a string rather than have javascript convert it to a string
+      //CODEREVIEW: Good spot for a string interpolation
       cell.setAttribute("id", [y, x]);
+      //CODEREVIEW: Good option to call "htmlRow" to avoid ambiguity with previous 'row' variable
       row.append(cell);
     }
     // TODO: append the row to the html board
@@ -75,9 +81,18 @@ function makeHtmlBoard() {
 /** findSpotForCol: given column x, return top empty y (null if filled) */
 
 function findSpotForCol(x) {
+  console.log("x=",x);
   // TODO: write the real version of this, rather than always returning 0
-  return 0;
+  for (let y = HEIGHT - 1; y >= 0; y--) {
+    console.log("y=",y);
+    console.log("board[y][x]",board[y][x]);
+     if (board[y][x].length === 0) {
+       return y;
+     }
+  } 
+  return null;
 }
+
 
 /** placeInTable: update DOM to place piece into HTML table of board */
 
@@ -86,11 +101,14 @@ function placeInTable(y, x) {
   const piece = document.createElement("div");
   piece.classList.add("piece");
 
+  //CODEREVIEW: Look at style guide for good uses vs bad uses of terniary
+  //CODEREVIEW: better use of terniary - piece.classList.add(currPlayer === 1 ? "player1" : "player2")
   currPlayer === 1
     ? piece.classList.add("player1")
     : piece.classList.add("player2");
 
-  const selectedCell = document.getElementById([y, x]);
+  //CODEREVIEW: Making the id more explicitly a string makes it easier to debug
+    const selectedCell = document.getElementById([y, x]);
   selectedCell.append(piece);
 }
 
@@ -115,6 +133,7 @@ function handleClick(evt) {
   // place piece in board and add to HTML table
   // TODO: add line to update in-memory board
   placeInTable(y, x);
+  board[y][x].push(currPlayer);
 
   // check for win
   if (checkForWin()) {
@@ -123,9 +142,15 @@ function handleClick(evt) {
 
   // check for tie
   // TODO: check if all cells in board are filled; if so call, call endGame
+  const checkForTie = board.every(item => item !== null);
 
-  // switch players
-  currPlayer === 1 ? (currPlayer = 2) : (currPlayer = 1);
+  if (checkForTie) {
+    endGame();
+  }
+
+
+// switch players
+currPlayer === 1 ? (currPlayer = 2) : (currPlayer = 1);
   // TODO: switch currPlayer 1 <-> 2
 }
 
